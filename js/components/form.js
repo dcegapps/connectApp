@@ -8,18 +8,14 @@ export const renderUserProfile = async () => {
     mainContent.innerHTML = `
         </br>
         <h2>User profile</h2>
-        Thank you for joining Connect for Cancer Prevention! Before you are officially enrolled, 
-        ${siteId ? sites()[siteId] : ''} will use this information to verify your eligibility. 
+        Thank you for joining the Connect for Cancer Prevention Study! Before you are officially enrolled, 
+        we will use this information to verify your eligibility. 
         We respect your privacy and will treat all information as confidential.
         
         <form id="userProfileForm" method="POST">
             <div class="form-group row">
                 <label class="col-md-4 col-form-label">First name <span class="required">*</span></label>
-                <input type="text" value="${myData.data['471168198']}" class="form-control required-field input-validation col-md-4" data-error-required='Please enter your first name.' data-validation-pattern="alphabets" data-error-validation="Your first name should contain only uppercase and lowercase letters. Please do not use any numbers or special characters." id="UPFirstName" placeholder="Enter first name">
-            </div>
-            <div class="form-group row" id="firstNameConsistency">
-                <label class="col-md-4 col-form-label">Verify first name <span class="required">*</span></label>
-                <input type="checkbox" class="form-control required-field col-custom custom-checkbox" data-error-required='Please verify your first name.' id="UPFirstNameVerify">
+                <input type="text" value="${myData.data['471168198']}" readonly disabled class="form-control required-field input-validation col-md-4 readonly" data-error-required='Please enter your first name.' data-validation-pattern="alphabets" data-error-validation="Your first name should contain only uppercase and lowercase letters. Please do not use any numbers or special characters." id="UPFirstName" placeholder="Enter first name">
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label">Middle name</label>
@@ -27,11 +23,7 @@ export const renderUserProfile = async () => {
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label">Last name <span class="required">*</span></label>
-                <input type="text" value="${myData.data['736251808']}" class="form-control required-field input-validation col-md-4" data-error-required='Please enter your last name.' data-validation-pattern="alphabets" data-error-validation="Your last name should contain only uppercase and lowercase letters. Please do not use any numbers or special characters." id="UPLastName" placeholder="Enter last name">
-            </div>
-            <div class="form-group row" id="lastNameConsistency">
-                <label class="col-md-4 col-form-label">Verify last name <span class="required">*</span></label>
-                <input type="checkbox" class="form-control required-field col-custom custom-checkbox" data-error-required='Please verify your last name.' id="UPLastNameVerify">
+                <input type="text" value="${myData.data['736251808']}" readonly disabled class="form-control required-field input-validation col-md-4 readonly" data-error-required='Please enter your last name.' data-validation-pattern="alphabets" data-error-validation="Your last name should contain only uppercase and lowercase letters. Please do not use any numbers or special characters." id="UPLastName" placeholder="Enter last name">
             </div>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label">Suffix</label>
@@ -46,7 +38,10 @@ export const renderUserProfile = async () => {
                     <option value="537892528">3rd</option>
                 </select>
             </div>
-            
+            <div class="form-group row">
+                <label class="col-md-4 col-form-label">What is your preferred first name? </label>
+                <input type="text" class="form-control col-md-4" id="UPPreferredFirstName" placeholder="Enter preferred first name">
+            </div>
             <strong>What is your date of birth?</strong>
             <div class="form-group row">
                 <label class="col-md-4 col-form-label">Month <span class="required">*</span></label>
@@ -130,8 +125,8 @@ export const renderUserProfile = async () => {
             </div>
             
             <div class="form-group row">
-                <label class="col-md-4 col-form-label">Preferred Email</label>
-                <input type="text" class="form-control col-md-4" id="UPEmail" title="Please enter a email address in this format: name@example.com." Placeholder="Enter preferred email"></br>
+                <label class="col-md-4 col-form-label">Preferred Email <span class="required">*</span></label>
+                <input type="text" class="form-control required-field col-md-4" id="UPEmail" data-error-required='Please enter your preferred email.' title="Please enter a email address in this format: name@example.com." Placeholder="Enter preferred email"></br>
             </div>
 
             <div class="form-group row">
@@ -175,7 +170,6 @@ export const renderUserProfile = async () => {
         </br></br>
     `;
     addYearsOptions();
-    addEventNameConsistency(myData.data['471168198'], myData.data['736251808']);
     addEventChangeFocus();
     addEventCancerFollowUp();
     addEventMonthSelection();
@@ -184,60 +178,6 @@ export const renderUserProfile = async () => {
     addEventAddressAutoComplete(1);
     addEventUPSubmit();
 };
-
-const addEventNameConsistency = (cfn, cln) => {
-    const input1 = document.getElementById('UPFirstName');
-    input1.addEventListener('keyup', () => {
-        if(input1.value !== cfn) {
-            const checkboxDiv = document.getElementById('firstNameConsistency');
-            checkboxDiv.hidden = true;
-            document.getElementById('UPFirstNameVerify').hidden = true;
-            document.getElementById('UPFirstNameVerify').checked = false;
-        }
-        else {
-            document.getElementById('firstNameConsistency').hidden = false;
-            document.getElementById('UPFirstNameVerify').hidden = false;
-        }
-    });
-
-    const input2 = document.getElementById('UPLastName');
-    input2.addEventListener('keyup', () => {
-        if(input2.value !== cln) {
-            const checkboxDiv = document.getElementById('lastNameConsistency');
-            checkboxDiv.hidden = true;
-            document.getElementById('UPLastNameVerify').hidden = true;
-            document.getElementById('UPLastNameVerify').checked = false;
-        }
-        else {
-            document.getElementById('lastNameConsistency').hidden = false;
-            document.getElementById('UPLastNameVerify').hidden = false;
-        }
-    });
-}
-
-export const renderAlternateContact = (id, required) => {
-    return `
-        <div class="form-group">
-            <label>
-                First name ${required ? '<span class="required">*</span>': ''}
-                <input type="text" class="form-control" ${required ? 'required' : ''} id="UPFirstName${id}" placeholder="Enter first name">
-            </label><br>
-            <label>
-                Middle initial
-                <input type="text" class="form-control" id="UPMiddleInitial${id}" placeholder="Enter middle initial">
-            </label><br>
-            <label>
-                Last name ${required ? '<span class="required">*</span>': ''}
-                <input type="text" class="form-control" ${required ? 'required' : ''} id="UPLastName${id}" placeholder="Enter last name">
-            </label><br>
-            <label>
-                Phone number ${required ? '<span class="required">*</span>': ''}
-                <input type="text" class="form-control" id="UPPhoneNumber${id}" ${required ? 'required' : ''} pattern="[1-9]{1}[0-9]{9}" size="10" maxlength="10" Placeholder="Enter phone number">
-            </label><br>
-        </div>
-        ${renderMailingAddress('', id, required, true)}
-    `;
-}
 
 export const renderMailingAddress = (type, id, required, showCountry) => {
     return `

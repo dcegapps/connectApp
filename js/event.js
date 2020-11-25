@@ -365,6 +365,7 @@ export const addEventUPSubmit = () => {
         formData['query.firstName'] = document.getElementById('UPFirstName').value.trim().toLowerCase();
         formData['231676651'] = document.getElementById('UPMiddleInitial').value.trim();
         formData['996038075'] = document.getElementById('UPLastName').value.trim();
+        formData['UPPreferredFirstName'] = document.getElementById('UPPreferredFirstName').value.trim();
         formData['query.lastName'] = document.getElementById('UPLastName').value.trim().toLowerCase();
         if(document.getElementById('UPSuffix').value) formData['506826178'] = parseInt(document.getElementById('UPSuffix').value);
         let month = document.getElementById('UPMonth').value;
@@ -729,9 +730,42 @@ const verifyUserDetails = (formData) => {
 export const addEventPreferredContactType = () => {
     const p1 = document.getElementById('UPPhoneNumber11');
     const email = document.getElementById('UPEmail');
+    const textPermission = document.getElementsByName('textPermission1');
+
+    Array.from(textPermission).forEach(element => {
+        element.parentNode.addEventListener('click', () => {
+            let textAllowed = false;
+            if(element.value === '353358909') textAllowed = true;
+
+            if(p1.value && email.value && textAllowed){
+                const div = document.getElementById('preferredEmailPhone');
+                if(div.innerHTML === ''){
+                    div.classList = ['form-group row']
+                    div.innerHTML = `
+                        <label class="col-md-4 col-form-label">How do you prefer that we reach you?</label>
+                        <div class="btn-group btn-group-toggle col-md-4" data-toggle="buttons">
+                            <label class="btn btn-light up-btns"><input type="radio" name="methodOfContact" value="127547625">Mobile phone</label>
+                            <label class="btn btn-light up-btns"><input type="radio" name="methodOfContact" value="357184057">Email</label>
+                        </div>
+                    `;
+                }
+            }
+            else {
+                const div = document.getElementById('preferredEmailPhone');
+                div.classList = '';
+                div.innerHTML = '';
+            }
+        })
+    })
 
     p1.addEventListener('keyup', () => {
-        if(p1.value && email.value){
+        let textAllowed = false;
+        const textPermission1 = document.getElementsByName('textPermission1');
+        Array.from(textPermission1).forEach(radioBtn => {
+            if(radioBtn.checked && radioBtn.value === '353358909') textAllowed = true;
+        });
+        
+        if(p1.value && email.value && textAllowed){
             const div = document.getElementById('preferredEmailPhone');
             if(div.innerHTML === ''){
                 div.classList = ['form-group row']
@@ -752,7 +786,12 @@ export const addEventPreferredContactType = () => {
     });
 
     email.addEventListener('keyup', () => {
-        if(p1.value && email.value){
+        let textAllowed = false;
+        const textPermission1 = document.getElementsByName('textPermission1');
+        Array.from(textPermission1).forEach(radioBtn => {
+            if(radioBtn.checked && radioBtn.value === '353358909') textAllowed = true;
+        });
+        if(p1.value && email.value && textAllowed){
             const div = document.getElementById('preferredEmailPhone');
             if(div.innerHTML === ''){
                 div.classList = ['form-group row']
